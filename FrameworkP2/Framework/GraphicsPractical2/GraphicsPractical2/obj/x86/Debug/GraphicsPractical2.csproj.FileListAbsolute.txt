@@ -1,0 +1,10 @@
+C:\Users\Timotheus Schut\Downloads\FrameworkP2\Framework\GraphicsPractical2\GraphicsPractical2\bin\x86\Debug\Content\Effects\Simple.xnb
+C:\Users\Timotheus Schut\Downloads\FrameworkP2\Framework\GraphicsPractical2\GraphicsPractical2\bin\x86\Debug\Content\Models\Teapot.xnb
+C:\Users\Timotheus Schut\Downloads\FrameworkP2\Framework\GraphicsPractical2\GraphicsPractical2\bin\x86\Debug\Content\Normal Maps\CobblestonesNormal.xnb
+C:\Users\Timotheus Schut\Downloads\FrameworkP2\Framework\GraphicsPractical2\GraphicsPractical2\bin\x86\Debug\Content\Textures\CobblestonesDiffuse.xnb
+C:\Users\Timotheus Schut\Downloads\FrameworkP2\Framework\GraphicsPractical2\GraphicsPractical2\bin\x86\Debug\GraphicsPractical2.exe
+C:\Users\Timotheus Schut\Downloads\FrameworkP2\Framework\GraphicsPractical2\GraphicsPractical2\bin\x86\Debug\GraphicsPractical2.pdb
+C:\Users\Timotheus Schut\Downloads\FrameworkP2\Framework\GraphicsPractical2\GraphicsPractical2\obj\x86\Debug\GraphicsPractical2.csprojResolveAssemblyReference.cache
+C:\Users\Timotheus Schut\Downloads\FrameworkP2\Framework\GraphicsPractical2\GraphicsPractical2\obj\x86\Debug\Microsoft.Xna.Framework.RuntimeProfile.txt
+C:\Users\Timotheus Schut\Downloads\FrameworkP2\Framework\GraphicsPractical2\GraphicsPractical2\obj\x86\Debug\GraphicsPractical2.exe
+C:\Users\Timotheus Schut\Downloads\FrameworkP2\Framework\GraphicsPractical2\GraphicsPractical2\obj\x86\Debug\GraphicsPractical2.pdb
