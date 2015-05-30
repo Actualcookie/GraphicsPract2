@@ -8,7 +8,7 @@
 
 // Matrices for 3D perspective projection 
 float4x4 View, Projection, World;
-
+float4 Color;
 //---------------------------------- Input / Output structures ----------------------------------
 
 // Each member of the struct has to be given a "semantic", to indicate what kind of data should go in
@@ -17,6 +17,8 @@ float4x4 View, Projection, World;
 struct VertexShaderInput
 {
 	float4 Position3D : POSITION0;
+	float4 ObjectNormal : NORMAL0;
+	float4 Color : COLOR0;
 };
 
 // The output of the vertex shader. After being passed through the interpolator/rasterizer it is also 
@@ -27,17 +29,20 @@ struct VertexShaderInput
 // defined by these three vertices. Therefor, all the values in the struct that you get as input for 
 // the pixel shaders have been linearly interpolated between there three vertices!
 // Note 2: You cannot use the data with the POSITION0 semantic in the pixel shader.
+
 struct VertexShaderOutput
 {
 	float4 Position2D : POSITION0;
+	
+	float4 Color : COLOR0;
 };
 
 //------------------------------------------ Functions ------------------------------------------
 
 // Implement the Coloring using normals assignment here
-float4 NormalColor(/* parameter(s) */)
+float4 NormalColor( VertexShaderOutput output ) 
 {
-	return float4(1, 0, 0, 1);
+	return Color;
 }
 
 // Implement the Procedural texturing assignment here
@@ -53,17 +58,21 @@ VertexShaderOutput SimpleVertexShader(VertexShaderInput input)
 	// Allocate an empty output struct
 	VertexShaderOutput output = (VertexShaderOutput)0;
 
+
 	// Do the matrix multiplications for perspective projection and the world transform
 	float4 worldPosition = mul(input.Position3D, World);
     float4 viewPosition  = mul(worldPosition, View);
 	output.Position2D    = mul(viewPosition, Projection);
-
+	float4 normal = input.ObjectNormal;
+	
+	output.Color.rgb = normal.gbr ; 
+	
 	return output;
 }
 
-float4 SimplePixelShader(VertexShaderOutput input) : COLOR0
+float4 SimplePixelShader(VertexShaderOutput output) : COLOR0
 {
-	float4 color = NormalColor();
+	float4 color = NormalColor(output);
 
 	return color;
 }
