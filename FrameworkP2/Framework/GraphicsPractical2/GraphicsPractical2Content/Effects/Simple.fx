@@ -33,6 +33,7 @@ struct VertexShaderInput
 struct VertexShaderOutput
 {
 	float4 Position2D : POSITION0;
+	float4 tex : TEXCOORD2;
 	float4 TNormal : TEXCOORD1;
 	float4 Color : COLOR0;
 };
@@ -49,7 +50,17 @@ float4 NormalColor( VertexShaderOutput input )
 // Implement the Procedural texturing assignment here
 float4 ProceduralColor(VertexShaderOutput output)
 {
-	return Color;
+	if (sin(output.tex.x) > 0 && sin(output.tex.y)>0)
+	{
+		float4 color = output.TNormal.xyzw;
+			return color;
+	}
+	else
+	{
+		float4 color = output.TNormal.wzyx;
+			return color;
+	}
+	
 }
 
 //---------------------------------------- Technique: Simple ----------------------------------------
@@ -59,7 +70,7 @@ VertexShaderOutput SimpleVertexShader(VertexShaderInput input)
 	// Allocate an empty output struct
 	VertexShaderOutput output = (VertexShaderOutput)0;
 
-
+	output.tex = input.Position3D;
 	// Do the matrix multiplications for perspective projection and the world transform
 	float4 worldPosition = mul(input.Position3D, World);
     float4 viewPosition  = mul(worldPosition, View);
@@ -71,8 +82,8 @@ VertexShaderOutput SimpleVertexShader(VertexShaderInput input)
 float4 SimplePixelShader(VertexShaderOutput output) : COLOR0
 {
 	
-	float4 color = NormalColor(output);
-	//color = ProceduralColor(output)
+	//float4 color1 = NormalColor(output);
+	float4 color = ProceduralColor(output)
 	return color;
 }
 
