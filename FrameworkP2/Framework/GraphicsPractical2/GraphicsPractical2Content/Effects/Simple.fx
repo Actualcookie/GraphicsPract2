@@ -83,7 +83,7 @@ float4 SimplePixelShader(VertexShaderOutput output) : COLOR0
 {
 	
 	//float4 color1 = NormalColor(output);
-	float4 color = ProceduralColor(output)
+	float4 color = ProceduralColor(output);
 	return color;
 }
 
