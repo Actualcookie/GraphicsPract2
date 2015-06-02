@@ -127,7 +127,7 @@ namespace GraphicsPractical2
             // Matrices for 3D perspective projection
             this.camera.SetEffectParameters(effect);
             effect.Parameters["World"].SetValue(Matrix.CreateScale(10.0f));
-            Vector3 lightdirection = new Vector3(1, 1, 1);
+            Vector3 lightdirection = new Vector3(50, 50, 50);
             effect.Parameters["LightDirection"].SetValue(lightdirection);
             // Draw the model
             mesh.Draw();

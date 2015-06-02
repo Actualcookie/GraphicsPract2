@@ -9,6 +9,11 @@
 float3 LightDirection;
 float4 DiffuseColor;
 float DiffuseStrenght = 0.1;
+//Variables Specular
+float SpecularPower;
+float SpecularIntensity;
+float4 SpecularColor;
+
 //Variables for Lambertian shading + Ambient colors
 float4 AmbientColor;
 float AmbientIntensity;
@@ -84,7 +89,7 @@ VertexShaderOutput SimpleVertexShader(VertexShaderInput input)
 	output.TNormal = input.Normal;
 	//Lambertian shading code goes here
 	float4 Lnormal = mul(input.Normal,World );
-	float lightStrenght = dot(Lnormal, LightDirection);
+	float lightStrenght = dot(Lnormal, normalize(LightDirection));
 	output.Color = saturate(DiffuseColor * DiffuseStrenght * lightStrenght);
 
 	return output;
@@ -98,7 +103,17 @@ float4 SimplePixelShader(VertexShaderOutput output) : COLOR0
 	//float4 color = ProceduralColor(output);
 	//return color;
 	//LamBertian Shading with ambient guesses
-	return saturate(output.Color + (AmbientColor * AmbientIntensity));
+	//return saturate(output.Color +(AmbientColor * AmbientIntensity));
+	//Specular shading
+	float3 light = normalize(LightDirection);
+	float3 normal = normalize(output.TNormal);
+	float3 r = normalize(2 * dot(light, normal) * normal - light);
+	float3 v = normalize(mul(normalize(View), World));
+
+	float product = dot(r, v);
+	float4 Shiny = SpecularIntensity * SpecularColor * max(pow(product, SpecularPower), 0) * length(output.Color);
+    return saturate(output.Color + AmbientColor * AmbientIntensity + Shiny);
+
 }
 
 technique Simple
