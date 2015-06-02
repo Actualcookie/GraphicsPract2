@@ -53,7 +53,8 @@ struct VertexShaderOutput
 
 // Implement the Coloring using normals assignment here
 float4 NormalColor( VertexShaderOutput input ) 
-{
+{	
+	//the normals that we get from the Input set the color of each vertex and the other pixels are Interpolations
 	float4 color = input.TNormal.xyzx;
 	return color;
 }
@@ -61,6 +62,7 @@ float4 NormalColor( VertexShaderOutput input )
 // Implement the Procedural texturing assignment here
 float4 ProceduralColor(VertexShaderOutput output)
 {
+	//since sin is cyclical we can use that to make each pixel whose position is greater than zero after the calculation this would create lines. but since we also take the ones that are lower than zero they alternate making the sweet checkerboard
 	if (sin(Pi*output.tex.y / 0.15) > 0 && sin(Pi*output.tex.x / 0.15)>0 || sin(Pi*output.tex.y / 0.15)<0 && sin(Pi*output.tex.x / 0.15)<0)
 	{
 		float4 color = output.TNormal.xyzx;
@@ -68,6 +70,7 @@ float4 ProceduralColor(VertexShaderOutput output)
 	}
 	else
 	{
+		//otherwise gain the inverse from the normal colors
 		float4 color = -output.TNormal.xyzx;
 			return color;
 	}
