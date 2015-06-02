@@ -45,7 +45,7 @@ struct VertexShaderOutput
 {
 	float4 Position2D : POSITION0;
 	float4 tex : TEXCOORD2;
-	float4 TNormal : TEXCOORD1;
+	float3 TNormal : TEXCOORD1;
 	float4 Color : COLOR0;
 };
 
@@ -54,7 +54,7 @@ struct VertexShaderOutput
 // Implement the Coloring using normals assignment here
 float4 NormalColor( VertexShaderOutput input ) 
 {
-	float4 color = input.TNormal.xyzw;
+	float4 color = input.TNormal.xyzx;
 	return color;
 }
 
@@ -63,12 +63,12 @@ float4 ProceduralColor(VertexShaderOutput output)
 {
 	if (sin(Pi*output.tex.y / 0.15) > 0 && sin(Pi*output.tex.x / 0.15)>0 || sin(Pi*output.tex.y / 0.15)<0 && sin(Pi*output.tex.x / 0.15)<0)
 	{
-		float4 color = output.TNormal;
+		float4 color = output.TNormal.xyzx;
 		return color;
 	}
 	else
 	{
-		float4 color = -output.TNormal;
+		float4 color = -output.TNormal.xyzx;
 			return color;
 	}
 	
@@ -88,7 +88,7 @@ VertexShaderOutput SimpleVertexShader(VertexShaderInput input)
 	output.Position2D    = mul(viewPosition, Projection);
 	output.TNormal = input.Normal;
 	//Lambertian shading code goes here
-	float4 Lnormal = (mul(input.Normal, ITWorld ));
+	float3 Lnormal = mul(normalize(input.Normal), ITWorld);
 	float lightStrenght = dot(Lnormal, normalize(LightDirection));
 	output.Color = saturate(DiffuseColor * DiffuseStrenght * lightStrenght);
 
@@ -115,7 +115,7 @@ float4 SimplePixelShader(VertexShaderOutput output) : COLOR0
 	float3 v = normalize(mul(normalize(View), World));
 
 	float product = dot(r, v);
-	float4 Shiny = SpecularIntensity * SpecularColor * max(pow(product, SpecularPower), 0) * length(output.Color);
+	float4 Shiny = SpecularIntensity * SpecularColor * max(pow(abs(product), SpecularPower), 0) * length(output.Color);
     return saturate(output.Color + AmbientColor * AmbientIntensity + Shiny); 
 
 }

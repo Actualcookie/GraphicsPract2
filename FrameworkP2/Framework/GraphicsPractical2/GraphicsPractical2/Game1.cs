@@ -29,7 +29,7 @@ namespace GraphicsPractical2
         private VertexPositionNormalTexture[] quadVertices;
         private short[] quadIndices;
         private Matrix quadTransform;
-        private Matrix World;
+        private Matrix World, ITWorld;
         public Game1()
         {
             this.graphics = new GraphicsDeviceManager(this);
@@ -126,12 +126,13 @@ namespace GraphicsPractical2
             effect.CurrentTechnique = effect.Techniques["Simple"];
             // Matrices for 3D perspective projection
             this.camera.SetEffectParameters(effect);
-            World = Matrix.CreateScale(10, 6.5f, 2.5f);
+            this.World = Matrix.CreateScale(10f,10f,10f);
 
-            Matrix ITWorld = Matrix.Invert(Matrix.Transpose(World));
+            this.ITWorld = Matrix.Invert(Matrix.Transpose(World));
+            effect.Parameters["ITWorld"].SetValue(ITWorld);
 
             effect.Parameters["World"].SetValue(World);
-            effect.Parameters["ITWorld"].SetValue(ITWorld);
+           
             Vector3 lightdirection = new Vector3(50, 50, 50);
             effect.Parameters["LightDirection"].SetValue(lightdirection);
             // Draw the model
