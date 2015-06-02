@@ -5,11 +5,10 @@
 
 // Top level variables can and have to be set at runtime
 // Top level variables for Lambertian shading
-float4x4 WorldInverseTranspose;
 
 float3 LightDirection;
-float4 DiffuseColor = float4(1, 1, 1, 1);
-float DiffuseStrenght = 1.0;
+float4 DiffuseColor;
+float DiffuseStrenght = 0.1;
 //Variables for Lambertian shading + Ambient colors
 float4 AmbientColor;
 float AmbientIntensity;
@@ -84,7 +83,7 @@ VertexShaderOutput SimpleVertexShader(VertexShaderInput input)
 	output.Position2D    = mul(viewPosition, Projection);
 	output.TNormal = input.Normal;
 	//Lambertian shading code goes here
-	float4 Lnormal = mul(input.Normal, WorldInverseTranspose);
+	float4 Lnormal = mul(input.Normal,World );
 	float lightStrenght = dot(Lnormal, LightDirection);
 	output.Color = saturate(DiffuseColor * DiffuseStrenght * lightStrenght);
 
@@ -96,10 +95,10 @@ float4 SimplePixelShader(VertexShaderOutput output) : COLOR0
 	//NormalColoring
 	//float4 color = NormalColor(output);
 	//Procedural Coloring
-	float4 color = ProceduralColor(output);
-	return color;
+	//float4 color = ProceduralColor(output);
+	//return color;
 	//LamBertian Shading with ambient guesses
-	//return saturate(output.Color + AmbientColor * AmbientIntensity);
+	return saturate(output.Color + (AmbientColor * AmbientIntensity));
 }
 
 technique Simple

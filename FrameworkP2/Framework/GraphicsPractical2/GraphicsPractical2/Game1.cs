@@ -66,6 +66,8 @@ namespace GraphicsPractical2
             this.spriteBatch = new SpriteBatch(this.GraphicsDevice);
             // Load the "Simple" effect
             Effect effect = this.Content.Load<Effect>("Effects/Simple");
+           
+            modelMaterial.SetEffectParameters(effect);
             // Load the model and let it use the "Simple" effect
             this.model = this.Content.Load<Model>("Models/Teapot");
             this.model.Meshes[0].MeshParts[0].Effect = effect;
@@ -125,7 +127,7 @@ namespace GraphicsPractical2
             // Matrices for 3D perspective projection
             this.camera.SetEffectParameters(effect);
             effect.Parameters["World"].SetValue(Matrix.CreateScale(10.0f));
-            Vector3 lightdirection = new Vector3(50, 50, 50);
+            Vector3 lightdirection = new Vector3(1, 1, 1);
             effect.Parameters["LightDirection"].SetValue(lightdirection);
             // Draw the model
             mesh.Draw();

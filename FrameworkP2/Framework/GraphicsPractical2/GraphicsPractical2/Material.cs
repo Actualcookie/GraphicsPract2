@@ -41,10 +41,13 @@ namespace GraphicsPractical2
         // Using this function requires all these elements to be present as top-level variables in the shader code. Comment out the ones that you don't use
         public void SetEffectParameters(Effect effect)
         {
+            AmbientColor = Color.Red ;            
             effect.Parameters["AmbientColor"].SetValue(this.AmbientColor.ToVector4());
+            AmbientIntensity = 0.2f;
             effect.Parameters["AmbientIntensity"].SetValue(this.AmbientIntensity);
-           /* effect.Parameters["DiffuseColor"].SetValue(this.DiffuseColor.ToVector4());
-            effect.Parameters["DiffuseTexture"].SetValue(this.DiffuseTexture);
+            DiffuseColor = Color.Red;
+            effect.Parameters["DiffuseColor"].SetValue(this.DiffuseColor.ToVector4());
+           /* effect.Parameters["DiffuseTexture"].SetValue(this.DiffuseTexture);
             effect.Parameters["NormalMap"].SetValue(this.NormalMap);
             effect.Parameters["DisplacementFactor"].SetValue(this.DisplacementFactor);
             effect.Parameters["SpecularColor"].SetValue(this.SpecularColor.ToVector4());
