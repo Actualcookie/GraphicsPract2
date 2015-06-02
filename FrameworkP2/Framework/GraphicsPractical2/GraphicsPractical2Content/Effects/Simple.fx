@@ -82,31 +82,32 @@ VertexShaderOutput SimpleVertexShader(VertexShaderInput input)
 	VertexShaderOutput output;
 
 	output.tex = input.Position3D;
+
 	// Do the matrix multiplications for perspective projection and the world transform
 	float4 worldPosition = mul(input.Position3D, World);
     float4 viewPosition  = mul(worldPosition, View);
 	output.Position2D    = mul(viewPosition, Projection);
 	output.TNormal = input.Normal;
-	//Lambertian shading code goes here
 
-	float4 Lnormal = mul(normalize(input.Normal),normalize(ITWorld));
-	float lightStrength = dot(Lnormal, (LightDirection));
-	output.Color = saturate(DiffuseColor * DiffuseStrength * lightStrength*3);
+	//Lambertian shading code goes 
+	float4 Lnormal = mul(normalize(input.Normal),normalize(ITWorld));		   // multiply the normal with the Inverse Transposed World matrix, so that normals rotate with the teapot
+	float lightStrength = dot(Lnormal, (LightDirection));					   //calculate how much light gets reflected.
+	output.Color = saturate(DiffuseColor * DiffuseStrength * lightStrength*3); // return the color. Our teapot was very dark, so we multiply by 3 to make the differences clearer
 
 	return output;
 }
 
 float4 SimplePixelShader(VertexShaderOutput output) : COLOR0
 {
-	//NormalColoring
-	//float4 color = NormalColor(output);
-	//return color;
+	//The different shaders. uncomment the one you want to test.
+
+	//Normal Coloring
+	//return NormalColor(output);
 
 	//Procedural Coloring
-	//float4 color = ProceduralColor(output);
-	//return color;
+	//return ProceduralColor(output);
 
-	//Lambertian Shading with ambient 
+	//Lambertian Shading
 	//return saturate(output.Color);
 
 	//Lambertian Shading with ambient 
@@ -120,7 +121,7 @@ float4 SimplePixelShader(VertexShaderOutput output) : COLOR0
 
 	float product = dot(r, v);
 	float4 Shiny = SpecularIntensity * SpecularColor * max(pow(abs(product), SpecularPower), 0) * length(output.Color);
-    return saturate(output.Color + AmbientColor * AmbientIntensity + Shiny); 
+	return saturate(output.Color + AmbientColor * AmbientIntensity + Shiny); 
 
 }
 
