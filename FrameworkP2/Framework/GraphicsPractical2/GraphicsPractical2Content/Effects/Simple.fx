@@ -8,7 +8,7 @@
 
 float3 LightDirection;
 float4 DiffuseColor;
-float DiffuseStrenght = 0.1;
+float DiffuseStrength = 0.1;
 //Variables Specular
 float SpecularPower;
 float SpecularIntensity;
@@ -79,7 +79,7 @@ float4 ProceduralColor(VertexShaderOutput output)
 VertexShaderOutput SimpleVertexShader(VertexShaderInput input)
 {
 	// Allocate an empty output struct
-	VertexShaderOutput output = (VertexShaderOutput)0;
+	VertexShaderOutput output;
 
 	output.tex = input.Position3D;
 	// Do the matrix multiplications for perspective projection and the world transform
@@ -88,10 +88,10 @@ VertexShaderOutput SimpleVertexShader(VertexShaderInput input)
 	output.Position2D    = mul(viewPosition, Projection);
 	output.TNormal = input.Normal;
 	//Lambertian shading code goes here
-	float4 Lnormal = (mul(input.Normal, ITWorld ));
-	float lightStrenght = dot(Lnormal, normalize(LightDirection));
-	output.Color = saturate(DiffuseColor * DiffuseStrenght * lightStrenght);
-
+	float4 LNormal = (mul(normalize(ITWorld),input.Normal));
+	float lightStrength = saturate(dot(LNormal, LightDirection));
+	output.Color = saturate(DiffuseColor * DiffuseStrength * lightStrength*5);
+	
 	return output;
 }
 
@@ -105,11 +105,14 @@ float4 SimplePixelShader(VertexShaderOutput output) : COLOR0
 	//float4 color = ProceduralColor(output);
 	//return color;
 
-	//Lambertian Shading with ambient guesses
+	//Lambertian Shading with ambient 
+	//return saturate(output.Color);
+
+	//Lambertian Shading with ambient 
 	//return saturate(output.Color +(AmbientColor * AmbientIntensity));
 
-	//Specular shading
-	float3 light = normalize(LightDirection);
+	////Specular shading
+	float3 light = (LightDirection);
 	float3 normal = normalize(output.TNormal);
 	float3 r = normalize(2 * dot(light, normal) * normal - light);
 	float3 v = normalize(mul(normalize(View), World));
