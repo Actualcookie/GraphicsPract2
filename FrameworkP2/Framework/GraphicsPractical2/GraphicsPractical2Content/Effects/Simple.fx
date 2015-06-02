@@ -1,11 +1,18 @@
 //------------------------------------------- Defines -------------------------------------------
 
 #define Pi 3.14159265
-
 //------------------------------------- Top Level Variables -------------------------------------
 
 // Top level variables can and have to be set at runtime
+// Top level variables for Lambertian shading
+float4x4 WorldInverseTranspose;
 
+float3 LightDirection;
+float4 DiffuseColor = float4(1, 1, 1, 1);
+float DiffuseStrenght = 1.0;
+//Variables for Lambertian shading + Ambient colors
+float4 AmbientColor;
+float AmbientIntensity;
 // Matrices for 3D perspective projection 
 float4x4 View, Projection, World;
 float4 Color;
@@ -50,14 +57,14 @@ float4 NormalColor( VertexShaderOutput input )
 // Implement the Procedural texturing assignment here
 float4 ProceduralColor(VertexShaderOutput output)
 {
-	if (sin(output.tex.x) > 0 && sin(output.tex.y)>0)
+	if (sin(Pi*output.tex.y / 0.15) > 0 && sin(Pi*output.tex.x / 0.15)>0 || sin(Pi*output.tex.y / 0.15)<0 && sin(Pi*output.tex.x / 0.15)<0)
 	{
-		float4 color = output.TNormal.xyzw;
-			return color;
+		float4 color = output.TNormal;
+		return color;
 	}
 	else
 	{
-		float4 color = output.TNormal.wzyx;
+		float4 color = -output.TNormal;
 			return color;
 	}
 	
@@ -76,15 +83,23 @@ VertexShaderOutput SimpleVertexShader(VertexShaderInput input)
     float4 viewPosition  = mul(worldPosition, View);
 	output.Position2D    = mul(viewPosition, Projection);
 	output.TNormal = input.Normal;
+	//Lambertian shading code goes here
+	float4 Lnormal = mul(input.Normal, WorldInverseTranspose);
+	float lightStrenght = dot(Lnormal, LightDirection);
+	output.Color = saturate(DiffuseColor * DiffuseStrenght * lightStrenght);
+
 	return output;
 }
 
 float4 SimplePixelShader(VertexShaderOutput output) : COLOR0
 {
-	
-	//float4 color1 = NormalColor(output);
+	//NormalColoring
+	//float4 color = NormalColor(output);
+	//Procedural Coloring
 	float4 color = ProceduralColor(output);
 	return color;
+	//LamBertian Shading with ambient guesses
+	//return saturate(output.Color + AmbientColor * AmbientIntensity);
 }
 
 technique Simple
