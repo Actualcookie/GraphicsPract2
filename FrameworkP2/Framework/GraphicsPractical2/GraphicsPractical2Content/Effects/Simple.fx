@@ -78,7 +78,7 @@ float4 ProceduralColor(VertexShaderOutput output)
 
 VertexShaderOutput SimpleVertexShader(VertexShaderInput input)
 {
-	// Allocate an empty output struct
+	// Allocate an  output struct
 	VertexShaderOutput output;
 
 	output.tex = input.Position3D;
@@ -89,7 +89,7 @@ VertexShaderOutput SimpleVertexShader(VertexShaderInput input)
 	output.Position2D    = mul(viewPosition, Projection);
 	output.TNormal = input.Normal;
 
-	//Lambertian shading code goes 
+	//Lambertian shading code
 	float4 Lnormal = mul(normalize(input.Normal),normalize(ITWorld));		   // multiply the normal with the Inverse Transposed World matrix, so that normals rotate with the teapot
 	float lightStrength = dot(Lnormal, (LightDirection));					   //calculate how much light gets reflected.
 	output.Color = saturate(DiffuseColor * DiffuseStrength * lightStrength*3); // return the color. Our teapot was very dark, so we multiply by 3 to make the differences clearer
