@@ -89,11 +89,11 @@ VertexShaderOutput SimpleVertexShader(VertexShaderInput input)
 	output.TNormal = input.Normal;
 	//Lambertian shading code goes here
 
-	float3 Lnormal = mul(normalize(input.Normal),normalize(ITWorld));
-	float lightStrenght = dot(Lnormal, normalize(LightDirection));
-	output.Color = saturate(DiffuseColor * DiffuseStrenght * lightStrenght*5);
+	float4 Lnormal = mul(normalize(input.Normal),normalize(ITWorld));
+	float lightStrength = dot(Lnormal, (LightDirection));
+	output.Color = saturate(DiffuseColor * DiffuseStrength * lightStrength*3);
 
-
+	return output;
 }
 
 float4 SimplePixelShader(VertexShaderOutput output) : COLOR0
@@ -112,7 +112,7 @@ float4 SimplePixelShader(VertexShaderOutput output) : COLOR0
 	//Lambertian Shading with ambient 
 	//return saturate(output.Color +(AmbientColor * AmbientIntensity));
 
-	////Specular shading
+	//Specular shading
 	float3 light = (LightDirection);
 	float3 normal = normalize(output.TNormal);
 	float3 r = normalize(2 * dot(light, normal) * normal - light);
