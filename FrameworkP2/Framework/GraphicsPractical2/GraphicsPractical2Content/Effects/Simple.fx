@@ -18,7 +18,7 @@ float4 SpecularColor;
 float4 AmbientColor;
 float AmbientIntensity;
 // Matrices for 3D perspective projection 
-float4x4 View, Projection, World;
+float4x4 View, Projection, World, ITWorld;
 float4 Color;
 //---------------------------------- Input / Output structures ----------------------------------
 
@@ -88,7 +88,7 @@ VertexShaderOutput SimpleVertexShader(VertexShaderInput input)
 	output.Position2D    = mul(viewPosition, Projection);
 	output.TNormal = input.Normal;
 	//Lambertian shading code goes here
-	float4 Lnormal = mul(input.Normal,World );
+	float4 Lnormal = (mul(input.Normal, ITWorld ));
 	float lightStrenght = dot(Lnormal, normalize(LightDirection));
 	output.Color = saturate(DiffuseColor * DiffuseStrenght * lightStrenght);
 
@@ -99,11 +99,15 @@ float4 SimplePixelShader(VertexShaderOutput output) : COLOR0
 {
 	//NormalColoring
 	//float4 color = NormalColor(output);
+	//return color;
+
 	//Procedural Coloring
 	//float4 color = ProceduralColor(output);
 	//return color;
-	//LamBertian Shading with ambient guesses
+
+	//Lambertian Shading with ambient guesses
 	//return saturate(output.Color +(AmbientColor * AmbientIntensity));
+
 	//Specular shading
 	float3 light = normalize(LightDirection);
 	float3 normal = normalize(output.TNormal);
@@ -112,7 +116,7 @@ float4 SimplePixelShader(VertexShaderOutput output) : COLOR0
 
 	float product = dot(r, v);
 	float4 Shiny = SpecularIntensity * SpecularColor * max(pow(product, SpecularPower), 0) * length(output.Color);
-    return saturate(output.Color + AmbientColor * AmbientIntensity + Shiny);
+    return saturate(output.Color + AmbientColor * AmbientIntensity + Shiny); 
 
 }
 
